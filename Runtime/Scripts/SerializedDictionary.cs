@@ -56,57 +56,15 @@ namespace AYellowpaper.SerializedCollections
 #endif
         }
 
-        public void Clone(IDictionary<TKey, TValue> original)
+        public void Reserialize()
         {
             _serializedList.Clear();
 
-            foreach (var kvp in original)
+            foreach (var kvp in this)
             {
                 var entry = new SerializedKeyValuePair<TKey, TValue>(kvp.Key, kvp.Value);
                 _serializedList.Add(entry);
             }
-
-            OnAfterDeserialize();
-        }
-
-        public void AddSerialized(TKey key, TValue value)
-        {
-#if UNITY_EDITOR
-            if (_serializedList.Find(x => x.Key.Equals(key)).Equals(default))
-            {
-                throw new ArgumentException($"An element with the same key already exists in collection.");
-            }
-
-            var entry = new SerializedKeyValuePair<TKey, TValue>(key, value);
-            _serializedList.Add(entry);
-#endif
-        }
-
-        public void RemoveSerialized(TKey key)
-        {
-#if UNITY_EDITOR
-            _serializedList.RemoveAll(x => x.Key.Equals(key));
-#endif
-        }
-
-        public void SetSerialized(TKey key, TValue value)
-        {
-#if UNITY_EDITOR
-            var entry = _serializedList.Find(x => x.Key.Equals(key));
-            if (entry.Equals(default))
-            {
-                throw new ArgumentNullException();
-            }
-
-            entry.Value = value;
-#endif
-        }
-
-        public void ClearSerialized()
-        {
-#if UNITY_EDITOR
-            _serializedList.Clear();
-#endif
         }
     }
 }
